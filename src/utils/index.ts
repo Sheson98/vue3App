@@ -8,9 +8,15 @@ import {Menu} from '@/api/interface'
 export function getFlatArr(menuList: Menu.MenuOptions[]) {
 	let newMenuList: Menu.MenuOptions[] = JSON.parse(JSON.stringify(menuList));
 	return newMenuList.reduce((pre: Menu.MenuOptions[], current: Menu.MenuOptions) => {
-		let flatArr = [...pre, current];
-		if (current.children) flatArr = [...flatArr, ...getFlatArr(current.children)];
-		return flatArr;
+		if(current.meta.isServiceRouter){
+			let flatArr = [...pre, current];
+			if (current.children) flatArr = [...flatArr, ...getFlatArr(current.children)];
+			return flatArr;
+		}else{
+			return [...pre]
+		}
+		
+		
 	}, []);
 }
 /**

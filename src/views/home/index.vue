@@ -35,8 +35,12 @@
         <BreadCrumb/>
       </header>
       <el-main>
+        21312312
         <router-view >
-          
+       
+          <component :is="
+             userVue
+          "></component>
         </router-view>
       </el-main>
     </div>
@@ -49,6 +53,7 @@
   import BreadCrumb  from '../public/breadcrumb/index.vue'
   import router from '@/routers';
   import  AuthStore from '@/stores/modules/auth';
+  import userVue from './systemManagement/user.vue';
   import {
     Document,
     Menu as IconMenu,
@@ -65,14 +70,15 @@
   const handleClose = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
   }
-  const authStore = AuthStore()
-  const routers =  ref(authStore.serviceRouter)
+
+  
   const handleSelect = (_:any,indexPath:any,item:any,routeResult:any)=>{
     console.log(indexPath,item,routeResult)
   }
- 
+
+  const routers = ref(router.getRoutes())
+   
   onMounted(()=>{
-    
     console.log()
   })
 

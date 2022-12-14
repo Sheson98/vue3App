@@ -18,7 +18,9 @@ const staticRouters:RouteRecordRaw[]= [
     {
         path:"/login",
         name:"login",
-        component:()=>import('@/views/login/index.vue'),
+        components:{
+			root:import('@/views/login/index.vue'),
+		},
         meta:{
             title:"登陆页",
 			isServiceRouter:true
@@ -27,7 +29,9 @@ const staticRouters:RouteRecordRaw[]= [
 	{
 		path:"/home/index",
 		name:"home",
-		component:()=>import('@/views/home/index.vue'),
+		components:{
+			root:import('@/views/home/index.vue')
+		},
 		meta:{
             title:"主页",
 			isServiceRouter:true
@@ -131,6 +135,7 @@ export const notFoundRouter = {
 
  })
  router.beforeEach(async (to,from,next)=>{
+	
 	NProgress.start()
 	const globalStore = GlobalStore();
 	if(to.path === "/login"){
@@ -148,7 +153,9 @@ export const notFoundRouter = {
 			//没有路由表 加载动态路由
 			await initDynamicRouter();
 			return next({...to,replace:true})
+			
 		}else{
+			
 			return next()
 		}
 		return next()

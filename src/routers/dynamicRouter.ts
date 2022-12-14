@@ -30,11 +30,10 @@ const initDynamicRouter= async ()=>{
             return Promise.reject("No permission");
         }
         //动态追加路由
-        authStore.flatMenuListGet.forEach((item:any)=>{
+        authStore.serviceRouter.forEach((item:any)=>{
             item.children && delete item.children;
             if (item.component &&item.meta.isServiceRouter) {
                 item.component = modules["/src/views" + item.component + ".vue"];
-
                 router.addRoute(item)
 			}
          
