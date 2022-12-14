@@ -33,7 +33,6 @@ import { GlobalStore } from '@/stores';
 import { Calendar, Search, User,View ,Lock} from '@element-plus/icons-vue'
 import initDynamicRouter from '@/routers/dynamicRouter';
 import router from '@/routers';
-import { debug } from 'console';
 type FormInstance = InstanceType<typeof ElForm>;
   const loginForm = ref<FormInstance>();
   const loginUser = reactive<Login.ReqLoginUser>({
@@ -52,12 +51,11 @@ type FormInstance = InstanceType<typeof ElForm>;
         try{
           loginApi({...loginUser,password:md5(loginUser.password)}).then(async (data)=>{
             const gobalStote =  GlobalStore();
-            gobalStote.setToken(data.data.token)
+            gobalStote.setToken(data?.data?.token)
             
             	// 2.添加动态路由
 			      await initDynamicRouter();
 
-            
              // 4.跳转到首页
 			       router.push('/home/index')
             ElNotification({

@@ -30,6 +30,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #e5e7eb;
 }
 
 h1 {
@@ -62,8 +63,7 @@ button:focus-visible {
 
 #app {
   
-  margin: 0 auto;
-  text-align: center;
+
 }
 
 @media (prefers-color-scheme: light) {

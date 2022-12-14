@@ -32,16 +32,14 @@ const initDynamicRouter= async ()=>{
         //动态追加路由
         authStore.flatMenuListGet.forEach((item:any)=>{
             item.children && delete item.children;
-            if (item.component && item.component == "string") {
-				item.component = "/src/views" + item.component + ".vue";
-			}
-            if(item.meta.isFull){
+            if (item.component &&item.meta.isServiceRouter) {
+                item.component = modules["/src/views" + item.component + ".vue"];
+
                 router.addRoute(item)
-            }else{
-                router.addRoute("/layout",item)
-            }
+			}
          
         })
+
         router.addRoute(notFoundRouter)
         
         console.log(router.getRoutes())

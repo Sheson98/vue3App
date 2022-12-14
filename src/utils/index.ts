@@ -13,3 +13,11 @@ export function getFlatArr(menuList: Menu.MenuOptions[]) {
 		return flatArr;
 	}, []);
 }
+/**
+ * @description 只保留业务路由用于界面显示
+ */
+export function getServiceRouter(menuList: Menu.MenuOptions[]){
+	return menuList.reduce((pre: Menu.MenuOptions[], current: Menu.MenuOptions)=>{
+		return	current.meta.isServiceRouter?[...pre,current]:[...pre]
+	},[])
+}

@@ -50,6 +50,7 @@ export declare namespace Menu {
 		isFull: boolean;
 		isAffix: boolean;
 		isKeepAlive: boolean;
+		isServiceRouter:boolean
 	}
 }
 // * 请求响应参数(包含data)

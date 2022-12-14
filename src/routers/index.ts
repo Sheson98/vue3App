@@ -6,6 +6,7 @@ import AuthStore from "@/stores/modules/auth";
 import initDynamicRouter from '@/routers/dynamicRouter';
 
 
+
 /**
  * 静态路由表
  */
@@ -19,19 +20,60 @@ const staticRouters:RouteRecordRaw[]= [
         name:"login",
         component:()=>import('@/views/login/index.vue'),
         meta:{
-            title:"登陆页"
+            title:"登陆页",
+			isServiceRouter:true
         }
     },
 	{
-		path:"/home",
+		path:"/home/index",
 		name:"home",
-		component:()=>import('@/views/home/index.vue')
+		component:()=>import('@/views/home/index.vue'),
+		meta:{
+            title:"主页",
+			isServiceRouter:true
+        }
+	},
+	{
+		path:"/system",
+		name:"system",
+		meta:{
+            title:"系统管理",
+			isServiceRouter:true
+        },
+		children:[
+			{
+				path:"/system/user",
+				name:"user",
+				component:()=>import( "@/views/home/systemManagement/user.vue"),
+				meta:{
+					title:"用户管理",
+					isServiceRouter:true
+				}
+			},
+			{
+				path:"/system/role",
+				name:"role",
+				component:()=>import( "@/views/home/systemManagement/role.vue"),
+				meta:{
+					title:"角色管理",
+					isServiceRouter:true
+				}
+			},
+			{
+				path:"/system/menu",
+				name:"menu",
+				component:()=>import( "@/views/home/systemManagement/menu.vue"),
+				meta:{
+					title:"菜单管理",
+					isServiceRouter:true
+				}
+			}
+		]
 	},
     {
         path:"/layout",
         name:"layout",
         redirect:"/home/index",
-
     }
 ]
 
@@ -109,6 +151,7 @@ export const notFoundRouter = {
 		}else{
 			return next()
 		}
+		return next()
 			
 		}else{
 			return next("/login")

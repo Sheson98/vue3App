@@ -1,6 +1,6 @@
 
 import {defineStore ,createPinia} from 'pinia'
-import { getFlatArr } from "@/utils";
+import { getFlatArr ,getServiceRouter} from "@/utils";
 import {Menu} from '@/api/interface'
 import { getAuthMenuListApi ,getAuthButtonListApi} from "@/api/modules/login";
 import { AuthState } from "@/stores/interface";
@@ -11,18 +11,20 @@ const AuthStore = defineStore({
         routeName:"",
         // 按钮权限列表
 		authButtonList: {},
+        serviceRouter:[]
     }),
     getters:{
         // 后端返回的菜单列表 ==> 这里没有经过任何处理
 		authMenuListGet: state => state.authMenuList,
         getRouteName:state=> state.routeName,   
         flatMenuListGet:state => getFlatArr(state.authMenuList),
+        serviceRouter:state =>getServiceRouter(state.authMenuList)
     },
     actions:{
         // getAuthMenuList
 		async getAuthMenuList() {
 			 getAuthMenuListApi().then((data)=>{
-                this.authMenuList = data;
+                this.authMenuList = data
              });
             
 			
@@ -32,7 +34,7 @@ const AuthStore = defineStore({
         },
         async getAuthButtonList() {
 			const  data  = await getAuthButtonListApi();
-			this.authButtonList = data;
+			//this.authButtonList = data;
 		},
     }
 })

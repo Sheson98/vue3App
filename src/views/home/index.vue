@@ -1,70 +1,104 @@
 <template>
-    <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-      <el-radio-button :label="false">expand</el-radio-button>
-      <el-radio-button :label="true">collapse</el-radio-button>
-    </el-radio-group>
+    <div class="container">
+      <div class="aside">
     <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
       :collapse="isCollapse"
       @open="handleOpen"
       @close="handleClose"
+      style="height:100vh"
+      @select="handleSelect"
+      :router="true"
     >
-      <el-sub-menu index="1">
+    <div style="text-align:right">
+      <el-icon v-show="isCollapse" :size="30" @click="()=>{isCollapse =!isCollapse}"><Expand  /></el-icon>
+      <el-icon v-show="!isCollapse" :size="30" @click="()=>{isCollapse =!isCollapse}"><Fold /></el-icon>
+      <el-icon>
+    <Delete />
+  </el-icon>
+    </div>
+    <h4 style="text-align:center">xxx管理系统</h4>
+      <el-sub-menu index="1" v-for="router in routers" :key="router.path">
         <template #title>
           <el-icon><location /></el-icon>
-          <span>Navigator One</span>
+          <span>{{router.meta.title}}</span>
         </template>
-        <el-menu-item-group>
-          <template #title><span>Group One</span></template>
-          <el-menu-item index="1-1">item one</el-menu-item>
-          <el-menu-item index="1-2">item two</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="Group Two">
-          <el-menu-item index="1-3">item three</el-menu-item>
-        </el-menu-item-group>
-        <el-sub-menu index="1-4">
-          <template #title><span>item four</span></template>
-          <el-menu-item index="1-4-1">item one</el-menu-item>
-        </el-sub-menu>
+        <template v-if="router.children?.length">
+          <el-menu-item :index="child.path"  v-for="child in router.children" :key="child.path">{{child.meta.title}}</el-menu-item>
+        </template>
       </el-sub-menu>
-      <el-menu-item index="2">
-        <el-icon><icon-menu /></el-icon>
-        <template #title>Navigator Two</template>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <el-icon><document /></el-icon>
-        <template #title>Navigator Three</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
     </el-menu>
+    </div>
+    <div class="main">
+      <header>
+        <BreadCrumb/>
+      </header>
+      <el-main>
+        <router-view >
+          
+        </router-view>
+      </el-main>
+    </div>
+    </div>
   </template>
-  
+   
+ 
   <script lang="ts" setup>
-  import { ref } from 'vue'
+  import { onMounted, ref } from 'vue'
+  import BreadCrumb  from '../public/breadcrumb/index.vue'
+  import router from '@/routers';
+  import  AuthStore from '@/stores/modules/auth';
   import {
     Document,
     Menu as IconMenu,
     Location,
     Setting,
+    Expand,
+    Fold
   } from '@element-plus/icons-vue'
   
   const isCollapse = ref(true)
   const handleOpen = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
-  }
+  }  
   const handleClose = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
   }
+  const authStore = AuthStore()
+  const routers =  ref(authStore.serviceRouter)
+  const handleSelect = (_:any,indexPath:any,item:any,routeResult:any)=>{
+    console.log(indexPath,item,routeResult)
+  }
+ 
+  onMounted(()=>{
+    
+    console.log()
+  })
+
   </script>
   
-  <style>
+  <style lang="less">
+    .container{
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      .aside{
+        height: 100%;
+      }
+      .main{
+
+      flex: 1;
+    }
+
+    }
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
-    min-height: 400px;
+    min-height: 100vh;
   }
+  content{
+    width: 100%;
+  }
+  
   </style>
   

@@ -9,4 +9,5 @@ export interface AuthState {
 		};
 	};
 	authMenuList: Menu.MenuOptions[];
+	serviceRouter:Menu.MenuOptions[];
 }
