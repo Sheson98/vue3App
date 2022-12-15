@@ -9,14 +9,19 @@ export const GlobalStore = defineStore({
         token:'',
         userInfo: '',
         assemblySize: '',
-        language: ''
+        language: '',
+        isCollapse:false,//是否折叠面板
     }),
     getters:{
-        GetToken:(state)=>state.token
+        GetToken:(state)=>state.token,
+        getIsCollapse:(state)=>state.isCollapse
     },
     actions:{
         setToken(token:string){
             this.token = token
+        },
+        setIsCollapse(is:boolean){
+            this.isCollapse = is
         }
     },
     persist:[ {
@@ -24,7 +29,6 @@ export const GlobalStore = defineStore({
 		storage: window.localStorage,
 		// storage: window.sessionStorage,
 	}]
-
 
 });
 // piniaPersist(持久化)

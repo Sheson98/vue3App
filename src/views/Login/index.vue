@@ -51,7 +51,7 @@ type FormInstance = InstanceType<typeof ElForm>;
         try{
           loginApi({...loginUser,password:md5(loginUser.password)}).then(async (data)=>{
             const gobalStote =  GlobalStore();
-            gobalStote.setToken(data?.data?.token)
+            gobalStote.setToken(data?.data.token)
             
             	// 2.添加动态路由
 			      await initDynamicRouter();

@@ -10,7 +10,7 @@ import initDynamicRouter from '@/routers/dynamicRouter';
 /**
  * 静态路由表
  */
-const staticRouters:RouteRecordRaw[]= [
+export const staticRouters:RouteRecordRaw[]= [
     {
 		path: "/",
 		redirect: '/home/index',
@@ -18,66 +18,28 @@ const staticRouters:RouteRecordRaw[]= [
     {
         path:"/login",
         name:"login",
-        components:{
-			root:import('@/views/login/index.vue'),
-		},
+        component:()=>import('@/views/login/index.vue'),
         meta:{
             title:"登陆页",
-			isServiceRouter:true
+
         }
     },
 	{
 		path:"/home/index",
 		name:"home",
-		components:{
-			root:import('@/views/home/index.vue')
-		},
+		children:[],
+		component:()=>import('@/views/home/index.vue'),
 		meta:{
             title:"主页",
-			isServiceRouter:true
         }
 	},
-	{
-		path:"/system",
-		name:"system",
-		meta:{
-            title:"系统管理",
-			isServiceRouter:true
-        },
-		children:[
-			{
-				path:"/system/user",
-				name:"user",
-				component:()=>import( "@/views/home/systemManagement/user.vue"),
-				meta:{
-					title:"用户管理",
-					isServiceRouter:true
-				}
-			},
-			{
-				path:"/system/role",
-				name:"role",
-				component:()=>import( "@/views/home/systemManagement/role.vue"),
-				meta:{
-					title:"角色管理",
-					isServiceRouter:true
-				}
-			},
-			{
-				path:"/system/menu",
-				name:"menu",
-				component:()=>import( "@/views/home/systemManagement/menu.vue"),
-				meta:{
-					title:"菜单管理",
-					isServiceRouter:true
-				}
-			}
-		]
-	},
+
     {
         path:"/layout",
         name:"layout",
         redirect:"/home/index",
+		component: () => import("@/layouts/index.vue"),
+		children:[]
     }
 ]
 
@@ -88,7 +50,7 @@ const staticRouters:RouteRecordRaw[]= [
 /**
  * errorRouter(错误页面路由)
  */
-export const errorRouter = [
+export const errorRouter:RouteRecordRaw[] = [
 	{
 		path: "/403",
 		name: "403",
@@ -135,7 +97,6 @@ export const notFoundRouter = {
 
  })
  router.beforeEach(async (to,from,next)=>{
-	
 	NProgress.start()
 	const globalStore = GlobalStore();
 	if(to.path === "/login"){
@@ -155,11 +116,8 @@ export const notFoundRouter = {
 			return next({...to,replace:true})
 			
 		}else{
-			
-			return next()
+			 next()
 		}
-		return next()
-			
 		}else{
 			return next("/login")
 		}

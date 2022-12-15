@@ -9,5 +9,14 @@ export interface AuthState {
 		};
 	};
 	authMenuList: Menu.MenuOptions[];
-	serviceRouter:Menu.MenuOptions[];
+	serviceRouters:Menu.MenuOptions[];
+}
+/* AuthState */
+export interface TabProps{
+	title:string,
+	name:string,
+}
+export interface TabsState {
+	currentTab: TabProps;
+	tabs:TabProps[]
 }

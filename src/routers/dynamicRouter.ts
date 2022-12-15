@@ -1,10 +1,11 @@
 import {GlobalStore } from '@/stores/index'
 import AuthStore from '@/stores/modules/auth'
 import { ElNotification } from "element-plus";
-import { notFoundRouter } from "@/routers";
+import { notFoundRouter,staticRouters} from "@/routers";
 
 import router from '@/routers/index'
 import { debug } from 'console';
+import { Menu } from '@/api/interface';
 // 引入 views 文件夹下所有 vue 文件
 const modules = import.meta.glob("@/views/**/*.vue");
 
@@ -30,17 +31,14 @@ const initDynamicRouter= async ()=>{
             return Promise.reject("No permission");
         }
         //动态追加路由
-        authStore.serviceRouter.forEach((item:any)=>{
+        authStore.flatRouters.forEach((item:any)=>{
             item.children && delete item.children;
             if (item.component &&item.meta.isServiceRouter) {
                 item.component = modules["/src/views" + item.component + ".vue"];
-                router.addRoute(item)
+                router.addRoute('layout',item)
 			}
-         
         })
-
         router.addRoute(notFoundRouter)
-        
         console.log(router.getRoutes())
     }catch(e){
         globalStore.setToken("")

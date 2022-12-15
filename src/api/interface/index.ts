@@ -19,6 +19,7 @@ export interface GlobalState {
 	userInfo: any;
 	assemblySize: string;
 	language: string;
+	isCollapse:boolean;
 }
 // * 请求枚举配置
 /**

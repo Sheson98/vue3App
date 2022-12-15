@@ -53,13 +53,12 @@ class RequestHttp{
                 return Promise.reject(data.msg)
             }
             if(data.code == ResultEnum.SUCCESS){
-                return  Promise.resolve(data.data)
+                return  Promise.resolve(data)
             }
             if(data.code == ResultEnum.ERROR){
                 ElMessage.error(data.msg)
                 return Promise.reject(data.msg)
             }
-            
             return  data
             
         },(reason:AxiosError)=>{
@@ -67,7 +66,7 @@ class RequestHttp{
         })
     }
     // * 常用请求方法封装
-	get<T>(url: string, params?: object, _object = {}): Promise<T> {
+	get<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
 		return this.service.get(url, { params, ..._object });
 	}
 	post<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
