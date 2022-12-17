@@ -24,9 +24,7 @@ const TabsStore = defineStore({
             this.currentTab = tab
           },
          async removeTab(tabName:string){
-           
             const names = this.tabs.map(m=>m.name)
-            const indexSign = names.indexOf(tabName)== names.length-1?"last":"start"
             this.tabs = this.tabs.filter(m=>m.name!==tabName)
             // if(indexSign=="last"){
             //     this.currentTab = this.tabs[this.tabs.length-1]

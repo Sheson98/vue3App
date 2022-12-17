@@ -47,9 +47,7 @@
         .el-main{
         padding: 0;
    }
-            .aside{
-
-            }
+        
     }
    
   

@@ -36,8 +36,13 @@ const AuthStore = defineStore({
 			const  data  = await getAuthButtonListApi();
 			//this.authButtonList = data;
 		},
-     
-    }
+        
+    },
+    persist:[ {
+		key:"AuthStore",
+		storage: window.localStorage,
+		// storage: window.sessionStorage,
+	}]
 })
 
 export default AuthStore

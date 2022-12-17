@@ -104,7 +104,7 @@ export const notFoundRouter = {
 		if(!globalStore.GetToken){
 			return  next()
 		}else{
-			return next(from.fullPath)
+			return next()
 		}
 	}	
 	if(globalStore.GetToken ){
