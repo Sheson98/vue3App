@@ -10,8 +10,6 @@
 
 <script setup lang="ts">
 import BreadCrumb from '../breadcrumb/index.vue'
-import { GlobalStore } from '@/stores';
-import { computed, ref } from 'vue';
 import  ToolTipLeft from './toolTipLeft.vue'
 import  ToolTipRight from './tooltipRight.vue'
 

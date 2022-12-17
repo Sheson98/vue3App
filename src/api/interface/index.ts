@@ -63,3 +63,8 @@ export interface Result {
 	code: string;
 	msg: string;
 }
+export  interface RouterTree{
+	label:string,
+	value:string,
+	children?:RouterTree[]
+}

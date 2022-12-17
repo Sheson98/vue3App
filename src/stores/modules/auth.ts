@@ -1,6 +1,6 @@
 
 import {defineStore ,storeToRefs} from 'pinia'
-import { getFlatArr ,getServiceRouter} from "@/utils";
+import { getFlatArr ,getServiceRouter,getRouterTree} from "@/utils";
 import {Menu} from '@/api/interface'
 import { getAuthMenuListApi ,getAuthButtonListApi} from "@/api/modules/login";
 import { AuthState } from "@/stores/interface";
@@ -18,6 +18,7 @@ const AuthStore = defineStore({
 		authMenuListGet: state => state.authMenuList,
         getRouteName:state=> state.routeName,   
         flatRouters:state => getFlatArr(state.authMenuList),
+        routerTree:state=>getRouterTree(state.authMenuList)
     },
     actions:{
         // getAuthMenuList
