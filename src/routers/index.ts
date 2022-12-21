@@ -111,7 +111,7 @@ export const notFoundRouter = {
 		const authStore = AuthStore() 
 		authStore.setRouteName(to.fullPath)
 		if(!authStore.authMenuListGet.length){
-			//没有路由表 加载动态路由
+			//没有动态路由表 加载动态路由
 			await initDynamicRouter();
 			return next({...to,replace:true})
 			

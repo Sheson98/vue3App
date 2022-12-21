@@ -4,8 +4,6 @@ import { ElNotification } from "element-plus";
 import { notFoundRouter,staticRouters} from "@/routers";
 
 import router from '@/routers/index'
-import { debug } from 'console';
-import { Menu } from '@/api/interface';
 // 引入 views 文件夹下所有 vue 文件
 const modules = import.meta.glob("@/views/**/*.vue");
 
@@ -39,6 +37,7 @@ const initDynamicRouter= async ()=>{
 			}
         })
         router.addRoute(notFoundRouter)
+        console.log("路由添加成功：：" )
         console.log(router.getRoutes())
     }catch(e){
         globalStore.setToken("")

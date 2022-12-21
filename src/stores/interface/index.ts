@@ -17,6 +17,11 @@ export interface TabProps{
 	name:string,
 }
 export interface TabsState {
+	beadCrumbs:BeadCrumb[];
 	currentTab: TabProps;
 	tabs:TabProps[]
+}
+export interface BeadCrumb{
+	to?:string,
+	title?:string
 }

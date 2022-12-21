@@ -10,5 +10,5 @@ export const getAuthMenuListApi =   () => {
 };
 // * 获取按钮权限
 export const getAuthButtonListApi = () => {
-	return http.get<Login.ResAuthButtons>( `/buttons`, {}, { headers: { noLoading: true } });
+	return http.get<string>( `/buttons`, {}, { headers: { noLoading: true } });
 };

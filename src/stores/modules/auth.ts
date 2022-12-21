@@ -18,7 +18,24 @@ const AuthStore = defineStore({
 		authMenuListGet: state => state.authMenuList,
         getRouteName:state=> state.routeName,   
         flatRouters:state => getFlatArr(state.authMenuList),
-        routerTree:state=>getRouterTree(state.authMenuList)
+        routerTree:state=>{
+            	//拼接根路由root
+            const menuListRoot:Menu.MenuOptions[] = [{
+                name:"root",
+                path:"/",
+                meta:{
+                    title:"root",
+                    icon:"",
+                    isHide: false,
+                    isFull: false,
+                    isAffix: false,
+                    isKeepAlive: false,
+                    isServiceRouter:false
+                },
+                children:[...state.authMenuList]
+            }]
+           return getRouterTree(menuListRoot)
+        }
     },
     actions:{
         // getAuthMenuList
@@ -26,8 +43,6 @@ const AuthStore = defineStore({
 			 getAuthMenuListApi().then((data)=>{
                 this.authMenuList = data.data
              });
-            
-			
 		},
         async setRouteName(routeName:string){
             this.routeName = routeName
@@ -41,6 +56,7 @@ const AuthStore = defineStore({
     persist:[ {
 		key:"AuthStore",
 		storage: window.localStorage,
+        paths:["routeName","authButtonList","serviceRouters"]
 		// storage: window.sessionStorage,
 	}]
 })

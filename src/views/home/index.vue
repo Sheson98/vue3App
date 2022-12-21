@@ -1,5 +1,7 @@
 <template>
+<keep-alive>
   <Layout/>
+</keep-alive>
   </template>
    
  

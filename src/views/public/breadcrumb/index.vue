@@ -1,23 +1,21 @@
 <template>
   <div class="header">
-    <el-breadcrumb :separator-icon="ArrowRight">
-      <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-      <el-breadcrumb-item>promotion management</el-breadcrumb-item>
-      <el-breadcrumb-item >promotion list</el-breadcrumb-item>
-      <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
+    <el-breadcrumb  separator="|">
+      <el-breadcrumb-item v-for="item in beadCrumbs" :to="{path:item.to}">{{ item.title }}</el-breadcrumb-item>
     </el-breadcrumb>
   </div>
-   
-  </template>
+</template>
   
 <script setup lang="ts">
-import { ArrowRight } from '@element-plus/icons-vue'
-import { ref } from 'vue'
 import { GlobalStore } from '@/stores';
+import TabsStore from '@/stores/modules/tabstore';
 import router from '@/routers';
-
+import { computed } from '@vue/runtime-core';
+const gobalStote =  GlobalStore()
+const tabsStore = TabsStore()
+const beadCrumbs = computed(()=>tabsStore.beadCrumbs)
+console.log(tabsStore.beadCrumbs)
 const handleLogOut =  async ()=>{
-  const gobalStote = await GlobalStore()
   gobalStote.setToken("")
   router.push('/login')
 }
@@ -26,12 +24,10 @@ const handleLogOut =  async ()=>{
 <style style="less" scoped>
   .header{
     margin: 0 20px;
-    
   }
   .el-breadcrumb{
     height: 100%;
     display: flex;
-  
 }
 
 </style>

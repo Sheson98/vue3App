@@ -29,13 +29,14 @@ import { onMounted } from 'vue'
   const gobalStore = GlobalStore()
   const isCollapse = computed(() => gobalStore.isCollapse);
   const defaultActive = computed(()=>tabsStore.currentTabGet.name)
-  const handleSelect = (path:any,indexPath:any,item:any,routeResult:any)=>{
+  const handleSelect = async (path:any,indexPath:any,item:any,routeResult:any)=>{
     const flatRouter = authStore.flatRouters
     const route = flatRouter.find(m=>m.path===path);
-    tabsStore.addTab({
+    await tabsStore.addTab({
         title:route?.meta.title??"",
         name:path
     })
+    tabsStore.setBeadCrumbPath()
     router.push(path)
   }
 

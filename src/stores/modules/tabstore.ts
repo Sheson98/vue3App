@@ -1,5 +1,6 @@
 import {defineStore ,storeToRefs} from 'pinia'
-import { TabProps, TabsState } from '../interface'
+import { BeadCrumb, TabProps, TabsState , } from '../interface'
+import {getBeadCrumbPath } from "@/utils";
 import router from '@/routers'
 const TabsStore = defineStore({
     id:"TabsStore",
@@ -8,7 +9,8 @@ const TabsStore = defineStore({
             title:'',
             name:""
         },
-        tabs:[]
+        tabs:[],
+        beadCrumbs:[]
     }),
     getters:{
         currentTabGet:state=>state.currentTab,
@@ -17,6 +19,9 @@ const TabsStore = defineStore({
     actions:{
         async setCurrentTab(currentTab:TabProps){
             this.currentTab = currentTab
+        },
+        async setBeadCrumbPath(){
+            this.beadCrumbs = getBeadCrumbPath(this.currentTab)
         },
         async addTab(tab:TabProps){
             this.tabs.push(tab)
@@ -32,7 +37,6 @@ const TabsStore = defineStore({
             // if(indexSign =="start"){
             //     this.currentTab = this.tabs[0]
             // }
-            
          },
          async changeTab(tabName:string){
            const {title} =  this.tabs.find(m=>m.name == tabName)??{}
@@ -41,7 +45,8 @@ const TabsStore = defineStore({
             title:title??""
            })
            router.push(tabName)
-         }
+         },
+        
          },
         
 })
