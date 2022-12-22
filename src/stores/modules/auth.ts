@@ -23,6 +23,7 @@ const AuthStore = defineStore({
             const menuListRoot:Menu.MenuOptions[] = [{
                 name:"root",
                 path:"/",
+                hidden:false,
                 meta:{
                     title:"root",
                     icon:"",
@@ -40,15 +41,15 @@ const AuthStore = defineStore({
     actions:{
         // getAuthMenuList
 		async getAuthMenuList() {
-			 getAuthMenuListApi().then((data)=>{
-                this.authMenuList = data.data
+			await  getAuthMenuListApi().then((data)=>{
+                this.authMenuList = data
              });
 		},
         async setRouteName(routeName:string){
             this.routeName = routeName
         },
         async getAuthButtonList() {
-			const  data  = await getAuthButtonListApi();
+			
 			//this.authButtonList = data;
 		},
         

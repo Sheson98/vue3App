@@ -16,14 +16,14 @@ const initDynamicRouter= async ()=>{
     const  authStore = AuthStore()
     try{
         await authStore.getAuthMenuList();
-		await authStore.getAuthButtonList();
-        if(!authStore.authMenuListGet.length){
+         if(!authStore.authMenuListGet.length){
             ElNotification({
                 title: "无权限访问",
                 message: "当前账号无任何菜单权限，请联系系统管理员！",
                 type: "warning",
                 duration: 3000
             });
+            
             globalStore.setToken("");
             router.replace("/login");
             return Promise.reject("No permission");
@@ -31,7 +31,7 @@ const initDynamicRouter= async ()=>{
         //动态追加路由
         authStore.flatRouters.forEach((item:any)=>{
             item.children && delete item.children;
-            if (item.component &&item.meta.isServiceRouter) {
+            if (item.component) {
                 item.component = modules["/src/views" + item.component + ".vue"];
                 router.addRoute('layout',item)
 			}

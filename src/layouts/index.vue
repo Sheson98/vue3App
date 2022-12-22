@@ -30,7 +30,7 @@ const authMenuListGet = ref(store.authMenuListGet);
 .el-container {
   height: 100%;
   .el-main {
-    padding: 0;
+    padding: 0 0 0 10px;
   }
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;

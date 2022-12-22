@@ -23,6 +23,17 @@ export default defineConfig({
       },
     },
   },
+  server:{
+    open:true,
+    port:3000,
+    proxy:{
+      '/dev-api':{
+        target:"http://localhost:8000",
+        changeOrigin:true,
+        rewrite:(path)=>path.replace(/^\/dev-api/,'')
+      }
+    }
+  },
   plugins: [
     AutoImport({
       resolvers: [ElementPlusResolver(),

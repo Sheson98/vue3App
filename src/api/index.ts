@@ -31,7 +31,7 @@ class RequestHttp{
          */
         this.service.interceptors.request.use((config:AxiosRequestConfig)=>{
             const globalStore = GlobalStore();//全局状态存储token
-            return { ...config, headers: { ...config.headers, "x-access-token": globalStore.token } };
+            return { ...config, headers: { ...config.headers, "x-access-token": globalStore.token,Authorization:"Bearer "+ globalStore.token} };
         },(reason)=>{
             return Promise.reject(reason)
         })
@@ -53,7 +53,7 @@ class RequestHttp{
                 return Promise.reject(data.msg)
             }
             if(data.code == ResultEnum.SUCCESS){
-                return  Promise.resolve(data)
+                return  data.data? Promise.resolve(data.data):Promise.resolve(data)
             }
             if(data.code == ResultEnum.ERROR){
                 ElMessage.error(data.msg)
@@ -66,16 +66,16 @@ class RequestHttp{
         })
     }
     // * 常用请求方法封装
-	get<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
+	get<T>(url: string, params?: object, _object = {}): Promise<T> {
 		return this.service.get(url, { params, ..._object });
 	}
-	post<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
+	post<T>(url: string, params?: object, _object = {}): Promise<T> {
 		return this.service.post(url, params, _object);
 	}
-	put<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
+	put<T>(url: string, params?: object, _object = {}): Promise<T> {
 		return this.service.put(url, params, _object);
 	}
-	delete<T>(url: string, params?: any, _object = {}): Promise<ResultData<T>> {
+	delete<T>(url: string, params?: any, _object = {}): Promise<T> {
 		return this.service.delete(url, { params, ..._object });
 	}
 

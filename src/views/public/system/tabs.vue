@@ -33,11 +33,25 @@ const changeTab = (targetName: string)=>{
   tabstore.changeTab(targetName);
 }
 </script>
-<style style="less">
+<style lang="less">
 .demo-tabs {
   height: 60px;
   line-height: 60px;
+
+  &.div{
+    border: none;
+  }
+  border: none;
+  .el-tabs__nav{
+    border: none !important;
+  }
 }
+.tabpane{
+    border: none;
+  }
+  .el-tabs__header{
+    border-bottom: none !important;
+  }
 .el-tabs__item{
     background-color: white;
     border-radius: 5px;

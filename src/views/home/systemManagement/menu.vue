@@ -117,10 +117,12 @@ const ruleFormRef = ref<FormInstance>();
 // do not use same name with ref
 const form = reactive<Menu.MenuOptions>({
   path: "",
+  hidden:false,
   name: "",
   meta: {
     icon: "",
     title: "",
+    link:"",
     isLink: "", //跳转的地址
     isHide: false,
     isFull: false,
