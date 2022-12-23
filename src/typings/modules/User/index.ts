@@ -57,7 +57,7 @@ export interface PageQuery<T>{
 }
 export interface PageRes<T>{
     code:number,
-    rows:T,
+    rows:T[],
     msg:string,
     total:number
 }

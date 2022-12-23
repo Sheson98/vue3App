@@ -1,24 +1,31 @@
 <template>
     <div class="tableContainer">
         <div class="table_toolbar">
+            <div class="headertools">
+                <el-button type="primary">新增</el-button>
+                <el-button>修改</el-button>
+            </div>
             <div class="right_bartools">
-                <el-switch v-model="changeStatus" size="large" @change="!changeStatus" />
-                <el-icon size="20">
-                    <RefreshLeft />
-                </el-icon>
-                
-                <el-popover placement="bottom"  width="80"   trigger="click" >
-                  <ul class="el-popover-ul" style="list-style: none; padding: 0;">
-                    <li>紧凑</li>
-                    <li>默认</li>
-                    <li>宽松</li>
-                </ul>
+                <el-tooltip class="box-item" effect="dark" content="切换斑马线" placement="top">
+                    <el-switch v-model="changeStatus" size="large" @change="!changeStatus" />
+                </el-tooltip>
+                <el-tooltip class="box-item" effect="dark" content="刷新" placement="top">
+                    <el-icon size="20">
+                        <RefreshLeft />
+                    </el-icon>
+                </el-tooltip>
+                <el-popover placement="bottom" width="80" trigger="click">
+                    <ul class="el-popover-ul" style="list-style: none; padding: 0;">
+                        <li>紧凑</li>
+                        <li>默认</li>
+                        <li>宽松</li>
+                    </ul>
                     <template #reference>
                         <el-icon size="20">
                             <el-tooltip class="box-item" effect="dark" content="密度" placement="top">
                                 <Crop />
                             </el-tooltip>
-                            </el-icon>
+                        </el-icon>
                     </template>
                 </el-popover>
                 <el-icon size="20">
@@ -29,71 +36,81 @@
                 </el-icon>
             </div>
         </div>
-        <el-table :data="data" style="width: 100%" max-height="250" :stripe="changeStatus">
-            <el-table-column fixed prop="date" label="Date" width="150" />
-            <el-table-column prop="name" label="Name" width="120" />
-            <el-table-column prop="state" label="State" width="120" />
-            <el-table-column prop="city" label="City" width="120" />
-            <el-table-column prop="address" label="Address" width="600" />
-            <el-table-column prop="zip" label="Zip" width="120" />
-            <el-table-column fixed="right" label="Operations" width="120">
-                <template #default="scope">
-                    <el-button link type="primary" size="small">
-                        Remove
-                    </el-button>
-                </template>
-            </el-table-column>
+        <el-table :data="tableData" style="width: 100%" max-height="250" :stripe="changeStatus">
+            <template v-for="item in props.columns">
+                <el-table-column  v-bind:="item" />
+            </template>
         </el-table>
-        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="data?.length"
-            v-model:current-page="currentPage" v-model:page-sizes="pageSize" @size-change="handleSizeChange"
+        <el-pagination  v-if="props.pagination"  background layout="total, sizes, prev, pager, next, jumper" :total="pageable.total"
+            v-model:current-page="pageable.pageNum" v-model:page-sizes="pageable.pageSize" @size-change="handleSizeChange"
             @current-change="handleCurrentChange" />
     </div>
 </template>
 <script  lang="ts" setup>
 import { ref, computed } from 'vue';
-const props = defineProps({
-    data: Array,
+import SearchForm from '../system/searchForm.vue'
+import { useTable } from '../hooks/useTable';
+import { ElTable, TableColumnCtx, TableProps } from "element-plus";
+import { BreakPoint, ColumnProps } from '@/typings/modules/table';
+interface ProTableProps extends Partial<Omit<TableProps<any>, "data">> {
+    columns: ColumnProps[]; // 列配置项
+    requestApi: (params: any) => Promise<any>; // 请求表格数据的api ==> 必传
+    dataCallback?: (data: any) => any; // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
+    title?: string; // 表格标题，目前只在打印的时候用到 ==> 非必传
+    pagination?: boolean; // 是否需要分页组件 ==> 非必传（默认为true）
+    initParam?: any; // 初始化请求参数 ==> 非必传（默认为{}）
+    border?: boolean; // 是否带有纵向边框 ==> 非必传（默认为true）
+    toolButton?: boolean; // 是否显示表格功能按钮 ==> 非必传（默认为true）
+    selectId?: string; // 当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
+    searchCol?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
+}
+
+const props = withDefaults(defineProps<ProTableProps>(), {
+    columns: () => [],
+    pagination: true,
+    initParam: {},
+    border: true,
+    toolButton: true,
+    selectId: "id",
+    searchCol: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 })
 })
-defineEmits([])
-const { data } = props
+
 const changeStatus = ref(false)
 const pageSize = computed(() => {
-    const total = data?.length ?? 0
+    const total = tableData?.value.length ?? 0
     const step: number = total / 4
     return [step, step * 2, 3 * step, 4 * step]
 })
 
-const currentPage = ref(4)
-const handleSizeChange = (val: number) => {
-    console.log(`${val} items per page`)
-}
-const handleCurrentChange = (val: number) => {
-    console.log(`current page: ${val}`)
-}
-const handleStatusChange = () => {
 
-}
+// 表格操作 Hooks
+const { tableData, pageable, searchParam, searchInitParam, getTableList, search, reset, handleSizeChange, handleCurrentChange } =
+    useTable(props.requestApi, props.initParam, props.pagination,);
 </script>
 <style lang="less" >
-   .el-popover{
-        min-width:60px !important;
-        cursor: pointer;
-        ul{
-            li{
-                text-align: center;
-                padding: 5px;
-            }
-            li:hover{
-                background-color: #c6e2ffed;
-                color: var(--el-color-primary);
-            }
-            li:not(:hover){
-                background-color: none;
-            }
+.el-popover {
+    min-width: 60px !important;
+    cursor: pointer;
+
+    ul {
+        li {
+            text-align: center;
+            padding: 5px;
+        }
+
+        li:hover {
+            background-color: #c6e2ffed;
+            color: var(--el-color-primary);
+        }
+
+        li:not(:hover) {
+            background-color: none;
         }
     }
+}
+
 .tableContainer {
- 
+
     .table_toolbar {
         height: 32px;
         width: 100%;
@@ -109,19 +126,23 @@ const handleStatusChange = () => {
             }
         }
     }
-    .el-popper{
+
+    .el-popper {
         min-width: 60px !important;
-        .el-popover-ul{
+
+        .el-popover-ul {
             padding-left: 0 !important;
             list-style: none !important;
             list-style-type: none;
-            li::marker{
+
+            li::marker {
                 list-style: none !important;
-            list-style-type: none;
+                list-style-type: none;
             }
-            
+
         }
     }
+
     .el-pagination {
         padding: 20px;
         float: right;

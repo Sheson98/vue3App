@@ -1,15 +1,15 @@
 <template>
    <div>
      <el-card class="box-card">
-          <el-form v-model="userQueryParam" label-width="120px" inline="true">
+          <el-form v-model="searchParam" label-width="120px" inline="true">
                <el-form-item label="登录账号">
-                    <el-input v-model="userQueryParam.loginName"  placeholder="请输入登陆账号"  />
+                    <el-input v-model="searchParam.loginName"  placeholder="请输入登陆账号"  />
                </el-form-item>
                <el-form-item label="手机号码" >
-                    <el-input v-model="userQueryParam.phonenumber"  placeholder="请输入手机号码"/>
+                    <el-input v-model="searchParam.phonenumber"  placeholder="请输入手机号码"/>
                </el-form-item>
                <el-form-item label="用户状态">
-                    <el-select v-model="userQueryParam.status" class="m-2" placeholder="" >
+                    <el-select v-model="searchParam.status" class="m-2" placeholder="" >
                          <el-option label="启用" value="0" />
                          <el-option label="停用" value="1" />
                     </el-select>
@@ -22,42 +22,32 @@
 
      </el-card>
      <el-card>
-          <div class="headertools">
-               <el-button type="primary">新增</el-button>
-               <el-button >修改</el-button>
-          </div>
-          <Table :data="tableData"/>
+          <Table  :request-api="getUserListApi"  :init-param="searchParam"   :columns="columns" />
      </el-card>
    </div>
 </template>
  
 <script lang="ts" setup>
-import { ReqUser } from '@/typings/modules/User';
+import { PageQuery, ReqUser, ResUser } from '@/typings/modules/User';
 import {StatusType} from '@/typings/modules'
 import { onMounted, reactive, ref } from 'vue'
 import {getUserListApi}  from  '@/api/modules/User/index'
 import Table from '@/views/public/system/el-table.vue'
+import { ColumnProps } from '@/typings/modules/table';
 // do not use same name with ref
-const userQueryParam = reactive<ReqUser>({
-     loginName: '',
-     phonenumber: '',
-     status: 0,
-})
-let tableData:any = []
-for(let i=0;i<20;i++){
-     tableData = [...tableData,{
-          date: '2016-05-03',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-     }]
+
+const searchParam = {
+     loginName:"",
+     phonenumber:"",
+     status:""
 }
 
-// onMounted(() => {
-//      // getUserListApi(userQueryParam).then((data)=>{
-
-//      // })
-// }),
-
+const columns: ColumnProps[] = [
+     {prop: "nickName", label: "用户姓名",},
+     {prop: "phonenumber", label: "电话号码",},
+     {prop: "sex", label: "性别",},
+     {prop: "remark", label: "备注",},
+]
 </script>
 
 <style lang="less" scoped>
