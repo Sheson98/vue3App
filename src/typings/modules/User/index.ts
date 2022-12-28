@@ -5,30 +5,30 @@ export interface  ReqUser{
     status:StatusType,
 }
 export interface ResUser {
-    admin:       boolean;
-    avatar:      string;
-    createBy:    string;
-    createTime:  string;
-    delFlag:     string;
-    dept:        Dept;
-    deptId:      number;
-    email:       string;
-    loginDate:   string;
-    loginIp:     string;
-    nickName:    string;
-    password:    null;
-    phonenumber: string;
-    postIds:     null;
-    remark:      string;
-    roleId:      null;
-    roleIds:     null;
-    roles:       string[];
-    sex:         string;
-    status:      string;
-    updateBy:    null;
-    updateTime:  null;
-    userId:      number;
-    userName:    string;
+    admin?:       boolean;
+    avatar?:      string;
+    createBy?:    string;
+    createTime?:  string;
+    delFlag?:     string;
+    dept?:        Dept;
+    deptId?:      number;
+    email?:       string;
+    loginDate?:   string;
+    loginIp?:     string;
+    nickName?:    string;
+    password?:    null;
+    phonenumber?: string;
+    postIds?:     null;
+    remark?:      string;
+    roleId?:      null;
+    roleIds?:     null;
+    roles?:       string[];
+    sex?:         string;
+    status?:      string;
+    updateBy?:    null;
+    updateTime?:  null;
+    userId?:      number;
+    userName?:    string;
 }
 
 export interface Dept {
@@ -57,8 +57,9 @@ export interface PageQuery<T>{
 }
 export interface PageRes<T>{
     code:number,
-    rows:T[],
+    rows?:T[],
     msg:string,
-    total:number
+    data?:T[],
+    total?:number
 }
 

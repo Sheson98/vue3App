@@ -1,10 +1,10 @@
 
-import {Menu, RouterTree} from '@/api/interface'
+import {Menu, Tree} from '@/api/interface'
 import { BeadCrumb, TabProps } from '@/stores/interface';
 import AuthStore from '@/stores/modules/auth';
 import { now } from '@vueuse/shared';
 import { MenuProps } from 'element-plus';
-
+import { ResDept } from "@/typings/modules/Dept";
 /**
  * @description 扁平化数组对象(主要用来处理路由菜单)
  * @param {Array} menuList 所有菜单列表
@@ -30,8 +30,8 @@ export function getServiceRouter(menuList: Menu.MenuOptions[]){
 /**
  * 获取路由树
  */
-export function getRouterTree(menuList: Menu.MenuOptions[]):RouterTree[]{
-	return  menuList.reduce((pre:RouterTree[],now:Menu.MenuOptions)=>(Array.isArray(now.children)&&now.children.length>0?[...pre,{
+export function getRouterTree(menuList: Menu.MenuOptions[]):Tree[]{
+	return  menuList.reduce((pre:Tree[],now:Menu.MenuOptions)=>(Array.isArray(now.children)&&now.children.length>0?[...pre,{
 		label:now.meta.title,
 		value:now.path,
 		children:getRouterTree(now.children)
@@ -73,4 +73,14 @@ export function getBeadCrumbPath(currentTab:TabProps):BeadCrumb[]{
 		return list
 	}
 	
+}
+export function getDeptTree(resDepts: ResDept[]):Tree[]{
+	return  resDepts.reduce((pre:Tree[],now:ResDept)=>(Array.isArray(now.children)&&now.children.length>0?[...pre,{
+		label:now.label,
+		value:now.id.toString(),
+		children:getDeptTree(now.children)
+	}]:[...pre,{
+		label:now.label,
+		value:now.id.toString(),
+	}]),[])
 }

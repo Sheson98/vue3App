@@ -4,7 +4,7 @@ import NProgress from "@/api/config/nprogress";
 import { GlobalStore } from "@/stores";
 import AuthStore from "@/stores/modules/auth";
 import initDynamicRouter from '@/routers/dynamicRouter';
-
+import "nprogress/nprogress.css";
 
 
 /**

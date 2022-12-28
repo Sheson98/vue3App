@@ -2,7 +2,7 @@
     <div class="tableContainer">
         <div class="table_toolbar">
             <div class="headertools">
-                <el-button type="primary">新增</el-button>
+                <el-button type="primary" @click="centerDialogVisible = true">新增</el-button>
                 <el-button>修改</el-button>
             </div>
             <div class="right_bartools">
@@ -38,20 +38,87 @@
         </div>
         <el-table :data="tableData" style="width: 100%" max-height="250" :stripe="changeStatus">
             <template v-for="item in props.columns">
-                <el-table-column  v-bind:="item" />
+                <el-table-column v-bind:="item" />
             </template>
         </el-table>
-        <el-pagination  v-if="props.pagination"  background layout="total, sizes, prev, pager, next, jumper" :total="pageable.total"
-            v-model:current-page="pageable.pageNum" v-model:page-sizes="pageable.pageSize" @size-change="handleSizeChange"
-            @current-change="handleCurrentChange" />
+        <el-pagination v-if="props.pagination" background layout="total, sizes, prev, pager, next, jumper"
+            :total="pageable.total" v-model:current-page="pageable.pageNum" v-model:page-sizes="pageable.pageSize"
+            @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+        <el-dialog v-model="centerDialogVisible" ref="formRef" title="新增" width="50%" align-center >
+            <el-form label-width="120px" v-model="userinfo" :inline="true" class="dialogForm">
+                <el-form-item label="用户名称"  required>
+                    <el-input  v-model="userinfo.nickName" />
+                </el-form-item>
+                <el-form-item label="归属部门"  required>
+                    <el-tree-select v-model="userinfo.deptId" :data="deptTree"  check-strictly :render-after-expand="false" />
+                </el-form-item>
+                <el-form-item label="手机号码">
+                    <el-input v-model="userinfo.phonenumber"  />
+                </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input v-model="userinfo.email" />
+                </el-form-item>
+                <el-form-item label="用户名称" required>
+                    <el-input v-model="userinfo.userName" />
+                </el-form-item>
+                <el-form-item label="用户密码">
+                    <el-input v-model="userinfo.password" />
+                </el-form-item>
+                <el-form-item label="性别">
+                    <el-select v-model="userinfo.sex" placeholder="请选择性别">
+                        <el-option label="Zone one" value="shanghai" />
+                        <el-option label="Zone two" value="beijing" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="状态">
+                    <el-radio-group v-model="userinfo.status">
+                        <el-radio :label="3">正常</el-radio>
+                        <el-radio :label="6">停用</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="岗位">
+                    <el-select v-model="userinfo.postIds" placeholder="请选择">
+                        <el-option label="Zone one" value="shanghai" />
+                        <el-option label="Zone two" value="beijing" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="角色">
+                    <el-select v-model="userinfo.postIds" placeholder="请选择">
+                        <el-option label="Zone one" value="shanghai" />
+                        <el-option label="Zone two" value="beijing" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="备注">
+                    <el-input
+                        v-model="userinfo.remark"
+                        type="textarea"
+                        rows="3"
+                        style="width:300px"
+                        placeholder="Please input"
+                    />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="centerDialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="handleSubmit(formRef)">
+                        提交
+                    </el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script  lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, reactive } from 'vue';
 import SearchForm from '../system/searchForm.vue'
 import { useTable } from '../hooks/useTable';
-import { ElTable, TableColumnCtx, TableProps } from "element-plus";
+import { ElTable, FormInstance, TableColumnCtx, TableProps } from "element-plus";
 import { BreakPoint, ColumnProps } from '@/typings/modules/table';
+import { ResUser } from '@/typings/modules/User';
+import {getUserDeptTree,updateUser} from '@/api/modules/User'
+import {getDeptTree} from '@/utils'
+const formRef = ref<FormInstance>();
 interface ProTableProps extends Partial<Omit<TableProps<any>, "data">> {
     columns: ColumnProps[]; // 列配置项
     requestApi: (params: any) => Promise<any>; // 请求表格数据的api ==> 必传
@@ -86,6 +153,36 @@ const pageSize = computed(() => {
 // 表格操作 Hooks
 const { tableData, pageable, searchParam, searchInitParam, getTableList, search, reset, handleSizeChange, handleCurrentChange } =
     useTable(props.requestApi, props.initParam, props.pagination,);
+
+const centerDialogVisible = ref(false)
+const userinfo =  reactive<ResUser>({
+    nickName:"",
+    deptId:undefined,
+    phonenumber:undefined,
+    email:undefined,
+    userName:undefined,
+    password:undefined,
+    sex:undefined,
+    status:undefined,
+    postIds:undefined,
+    roleId:undefined,
+    remark:undefined
+    
+
+})
+const deptTree = ref()
+getUserDeptTree().then(res=>{
+        deptTree.value = getDeptTree(res??[])
+    })
+const handleSubmit = (formRef :FormInstance | undefined)=>{
+    if(!formRef) return
+    formRef.validate(async(valid,fields)=>{
+        updateUser().then((res)=>{
+            debugger
+        })
+    })
+    centerDialogVisible.value =false
+}    
 </script>
 <style lang="less" >
 .el-popover {
@@ -146,6 +243,11 @@ const { tableData, pageable, searchParam, searchInitParam, getTableList, search,
     .el-pagination {
         padding: 20px;
         float: right;
+    }
+    .dialogForm>.el-form-item{
+        >*{
+            width: 200px;
+        }
     }
 }
 </style>

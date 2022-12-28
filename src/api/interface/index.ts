@@ -75,8 +75,8 @@ export interface Result {
   code: string;
   msg: string;
 }
-export interface RouterTree {
+export interface Tree {
   label: string;
   value: string;
-  children?: RouterTree[];
+  children?: Tree[];
 }
